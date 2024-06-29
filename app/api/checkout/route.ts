@@ -59,6 +59,7 @@ export async function POST(req: NextRequest) {
             ...(cartItem.size && { size: cartItem.size }),
             ...(cartItem.color && { color: cartItem.color }),
             images: cartItem.images,
+            description: cartItem.description
           },
         },
         unit_amount: cartItem.item.price,

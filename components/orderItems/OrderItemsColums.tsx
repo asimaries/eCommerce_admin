@@ -75,6 +75,14 @@ export const columns: ColumnDef<OrderItemType>[] = [
         </Button>
       );
     }
-
+  },
+  {
+    accessorKey: "description",
+    header: "Description",
+    cell: ({ row }) => {
+      return <div className="w-64 h-10 overflow-auto border rounded scrollable-div ">
+        {row.original.description}
+      </div>
+    }
   },
 ];
