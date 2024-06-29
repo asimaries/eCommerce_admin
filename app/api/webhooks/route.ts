@@ -47,7 +47,8 @@ export const POST = async (req: NextRequest) => {
         color: item.price.product.metadata.color || "N/A",
         size: item.price.product.metadata.size || "N/A",
         quantity: item.quantity,
-        images: item.price.product.metadata.images
+        images: item.price.product.metadata.images,
+        description: item.price.product.metadata.description
       }
     })
 

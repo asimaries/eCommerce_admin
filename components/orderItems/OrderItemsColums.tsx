@@ -31,12 +31,13 @@ export const columns: ColumnDef<OrderItemType>[] = [
     header: "Quantity",
   },
   {
-    accessorKey: "images",
-    header: "Images",
+    accessorKey: "description",
+    header: "Description",
     cell: ({ row }) => {
-      return <div>{row.original.images?.map(image => {
-        return <p>{image}</p>
-      })}</div>
+      return <div className="w-64 h-10 overflow-auto border rounded scrollable-div ">
+        {row.original.description}
+      </div>
+
     }
   },
 ];
