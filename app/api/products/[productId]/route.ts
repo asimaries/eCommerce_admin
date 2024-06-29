@@ -78,33 +78,26 @@ export const POST = async (
       });
     }
 
-    const addedCollections = collections.filter(
-      (collectionId: string) => !product.collections.includes(collectionId)
-    );
-    // included in new data, but not included in the previous data
-
-    const removedCollections = product.collections.filter(
-      (collectionId: string) => !collections.includes(collectionId)
-    );
-    // included in previous data, but not included in the new data
 
     // Update collections
-    await Promise.all([
-      // Update added collections with this product
-      ...addedCollections.map((collectionId: string) =>
-        Collection.findByIdAndUpdate(collectionId, {
-          $push: { products: product._id },
-        })
-      ),
+    await Promise.all([...product.collections.map(async (collectionId: string) => {
+      const collection = await Collection.findById(collectionId);
+      if (collection) {
+        collection.products.pull(product._id);
+        await collection.save();
+      }
+    }),
 
-      // Update removed collections without this product
-      ...removedCollections.map((collectionId: string) =>
-        Collection.findByIdAndUpdate(collectionId, {
-          $pull: { products: product._id },
-        })
-      ),
     ]);
-
+    await Promise.all([
+      ...collections.map(async (collectionId: string) => {
+        const collection = await Collection.findById(collectionId);
+        if (collection && !collection.products.includes(product._id)) {
+          collection.products.push(product._id);
+          await collection.save();
+        }
+      }),
+    ])
     // Update product
     const updatedProduct = await Product.findByIdAndUpdate(
       product._id,
