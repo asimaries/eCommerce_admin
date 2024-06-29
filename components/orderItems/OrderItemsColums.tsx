@@ -1,7 +1,11 @@
 "use client";
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
+
 
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
+import { Button } from '../ui/button';
 
 export const columns: ColumnDef<OrderItemType>[] = [
   {
@@ -31,13 +35,54 @@ export const columns: ColumnDef<OrderItemType>[] = [
     header: "Quantity",
   },
   {
+    accessorKey: "images",
+    header: "Images",
+    cell: ({ row }) => {
+      const handleButtonClick = async () => {
+        const images = row.original.images;
+
+        if (!images || images.length === 0) {
+          alert("No images available to download.");
+          return;
+        }
+        console.log(row)
+        const zip = new JSZip();
+        const folder = zip.folder("images");
+
+        if (!folder) {
+          alert("Failed to create zip folder.");
+          return;
+        }
+        const getFileType = (url: string) => {
+          const parts = url.split('.');
+          return parts[parts.length - 1];
+        };
+        for (let index = 0; index < images.length; index++) {
+          const imageUrl = images[index];
+          const response = await fetch(imageUrl);
+          const blob = await response.blob();
+          folder.file(`image${index + 1}.${getFileType(imageUrl)}`, blob);
+        }
+
+        zip.generateAsync({ type: "blob" }).then((content: any) => {
+          saveAs(content, "images.zip");
+        });
+      };
+
+      return (
+        <Button title='Download Images' className='hover:bg-neutral-200' onClick={handleButtonClick}>
+          Download Images
+        </Button>
+      );
+    }
+  },
+  {
     accessorKey: "description",
     header: "Description",
     cell: ({ row }) => {
       return <div className="w-64 h-10 overflow-auto border rounded scrollable-div ">
         {row.original.description}
       </div>
-
     }
   },
 ];
