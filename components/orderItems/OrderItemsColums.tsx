@@ -1,10 +1,11 @@
 "use client";
 import JSZip from 'jszip';
-import { saveAs } from 'file-saver'; // You'll also need to install this: npm install file-saver
+import { saveAs } from 'file-saver';
 
 
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
+import { Button } from '../ui/button';
 
 export const columns: ColumnDef<OrderItemType>[] = [
   {
@@ -36,14 +37,7 @@ export const columns: ColumnDef<OrderItemType>[] = [
   {
     accessorKey: "images",
     header: "Images",
-    cell: ({ row }) => 
-    //   {
-    //   return <div>{row.original.images?.map(image => {
-    //     return <p>{image}</p>
-    //   })}</div>
-    // }
-
-    {
+    cell: ({ row }) => {
       const handleButtonClick = async () => {
         const images = row.original.images;
 
@@ -51,7 +45,7 @@ export const columns: ColumnDef<OrderItemType>[] = [
           alert("No images available to download.");
           return;
         }
-
+        console.log(row)
         const zip = new JSZip();
         const folder = zip.folder("images");
 
@@ -59,26 +53,26 @@ export const columns: ColumnDef<OrderItemType>[] = [
           alert("Failed to create zip folder.");
           return;
         }
-
-        // Add each image to the zip folder using a traditional for loop
+        const getFileType = (url: string) => {
+          const parts = url.split('.');
+          return parts[parts.length - 1];
+        };
         for (let index = 0; index < images.length; index++) {
           const imageUrl = images[index];
           const response = await fetch(imageUrl);
           const blob = await response.blob();
-          folder.file(`image${index + 1}.jpg`, blob); // You can change the file name and extension as needed
+          folder.file(`image${index + 1}.${getFileType(imageUrl)}`, blob);
         }
 
-        // Generate the zip file and trigger the download
-        zip.generateAsync({ type: "blob" }).then((content) => {
+        zip.generateAsync({ type: "blob" }).then((content: any) => {
           saveAs(content, "images.zip");
         });
       };
 
-      // Directly return the JSX without the `return` keyword
       return (
-        <button onClick={handleButtonClick}>
+        <Button title='Download Images' className='hover:bg-neutral-200' onClick={handleButtonClick}>
           Download Images
-        </button>
+        </Button>
       );
     }
 
