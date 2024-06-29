@@ -30,4 +30,13 @@ export const columns: ColumnDef<OrderItemType>[] = [
     accessorKey: "quantity",
     header: "Quantity",
   },
+  {
+    accessorKey: "images",
+    header: "Images",
+    cell: ({ row }) => {
+      return <div>{row.original.images?.map(image => {
+        return <p>{image}</p>
+      })}</div>
+    }
+  },
 ];

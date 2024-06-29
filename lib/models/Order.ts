@@ -11,6 +11,8 @@ const orderSchema = new mongoose.Schema({
       color: String,
       size: String,
       quantity: Number,
+      images: [String],
+      description: String,
     },
   ],
   shippingAddress: {

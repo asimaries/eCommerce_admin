@@ -18,38 +18,58 @@ export async function POST(req: NextRequest) {
     if (!cartItems || !customer) {
       return new NextResponse("Not enough data to checkout", { status: 400 });
     }
-
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "payment",
-      shipping_address_collection: {
-        allowed_countries: ["US", "CA"],
-      },
-      shipping_options: [
-        { shipping_rate: "shr_1MfufhDgraNiyvtnDGef2uwK" },
-        { shipping_rate: "shr_1OpHFHDgraNiyvtnOY4vDjuY" },
-      ],
-      line_items: cartItems.map((cartItem: any) => ({
-        price_data: {
-          currency: "cad",
-          product_data: {
-            name: cartItem.item.title,
-            metadata: {
-              productId: cartItem.item._id,
-              ...(cartItem.size && { size: cartItem.size }),
-              ...(cartItem.color && { color: cartItem.color }),
-            },
+    /* 
+        const session = await stripe.checkout.sessions.create({
+          payment_method_types: ["card"],
+          mode: "payment",
+          shipping_address_collection: {
+            allowed_countries: ["US", "CA"],
           },
-          unit_amount: cartItem.item.price * 100,
+          shipping_options: [
+            { shipping_rate: "shr_1MfufhDgraNiyvtnDGef2uwK" },
+            { shipping_rate: "shr_1OpHFHDgraNiyvtnOY4vDjuY" },
+          ],
+          line_items: cartItems.map((cartItem: any) => ({
+            price_data: {
+              currency: "cad",
+              product_data: {
+                name: cartItem.item.title,
+                metadata: {
+                  productId: cartItem.item._id,
+                  ...(cartItem.size && { size: cartItem.size }),
+                  ...(cartItem.color && { color: cartItem.color }),
+                },
+              },
+              unit_amount: cartItem.item.price * 100,
+            },
+            quantity: cartItem.quantity,
+          })),
+          client_reference_id: customer.clerkId,
+          success_url: `${process.env.ECOMMERCE_STORE_URL}/payment_success`,
+          cancel_url: `${process.env.ECOMMERCE_STORE_URL}/cart`,
+        });
+     */
+    const line_items = cartItems.map((cartItem: any) => ({
+      price: {
+        currency: "Rs.",
+        product: {
+          name: cartItem.item.title,
+          metadata: {
+            productId: cartItem.item._id,
+            ...(cartItem.size && { size: cartItem.size }),
+            ...(cartItem.color && { color: cartItem.color }),
+            images: cartItem.images,
+          },
         },
-        quantity: cartItem.quantity,
-      })),
-      client_reference_id: customer.clerkId,
-      success_url: `${process.env.ECOMMERCE_STORE_URL}/payment_success`,
-      cancel_url: `${process.env.ECOMMERCE_STORE_URL}/cart`,
-    });
-
-    return NextResponse.json(session, { headers: corsHeaders });
+        unit_amount: cartItem.item.price,
+      },
+      quantity: cartItem.quantity,
+    }));
+    await fetch(`${process.env.ADMIN_DASHBOARD_URL}/api/webhooks`, {
+      method: 'POST',
+      body: JSON.stringify({ line_items, customer })
+    })
+    return NextResponse.json({}, { headers: corsHeaders });
   } catch (err) {
     console.log("[checkout_POST]", err);
     return new NextResponse("Internal Server Error", { status: 500 });

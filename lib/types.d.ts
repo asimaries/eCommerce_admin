@@ -12,7 +12,7 @@ type ProductType = {
   description: string;
   media: [string];
   category: string;
-  collections: [CollectionType];
+  collections: CollectionType[];
   tags: [string];
   sizes: [string];
   colors: [string];
@@ -35,6 +35,8 @@ type OrderItemType = {
   color: string;
   size: string;
   quantity: number;
+  images?: string[];
+  description?: string;
 }
 
 type CustomerType = {

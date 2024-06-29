@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 
 export const POST = async (req: NextRequest) => {
-  try {
+  try {/* 
     const rawBody = await req.text()
     const signature = req.headers.get("Stripe-Signature") as string
 
@@ -38,41 +38,52 @@ export const POST = async (req: NextRequest) => {
       )
 
       const lineItems = await retrieveSession?.line_items?.data
-
-      const orderItems = lineItems?.map((item: any) => {
-        return {
-          product: item.price.product.metadata.productId,
-          color: item.price.product.metadata.color || "N/A",
-          size: item.price.product.metadata.size || "N/A",
-          quantity: item.quantity,
-        }
-      })
-
-      await connectToDB()
-
-      const newOrder = new Order({
-        customerClerkId: customerInfo.clerkId,
-        products: orderItems,
-        shippingAddress,
-        shippingRate: session?.shipping_cost?.shipping_rate,
-        totalAmount: session.amount_total ? session.amount_total / 100 : 0,
-      })
-
-      await newOrder.save()
-
-      let customer = await Customer.findOne({ clerkId: customerInfo.clerkId })
-
-      if (customer) {
-        customer.orders.push(newOrder._id)
-      } else {
-        customer = new Customer({
-          ...customerInfo,
-          orders: [newOrder._id],
-        })
+*/
+    const { line_items, customer: customerInfo } = JSON.parse(await req.text());
+    console.log(JSON.stringify(line_items, null, 2), customerInfo)
+    const orderItems = line_items?.map((item: any) => {
+      return {
+        product: item.price.product.metadata.productId,
+        color: item.price.product.metadata.color || "N/A",
+        size: item.price.product.metadata.size || "N/A",
+        quantity: item.quantity,
+        images: item.price.product.metadata.images
       }
+    })
 
-      await customer.save()
+    await connectToDB()
+
+    const newOrder = new Order({
+      customerClerkId: customerInfo.clerkId,
+      products: orderItems,
+      shippingAddress: {
+        street: 'atlanta',
+        city: 'shil phata',
+        state: 'maharastra',
+        postalCode: '400612',
+        country: 'India',
+      },
+      shippingRate: 0,
+      totalAmount: (line_items as Array<any>).reduce((acc: number, item: any) => {
+        return acc + (Number(item.price.unit_amount) * Number(item.quantity))
+      }, 0),
+    })
+    console.log(newOrder)
+    await newOrder.save()
+
+    let customer = await Customer.findOne({ clerkId: customerInfo.clerkId })
+
+    if (customer) {
+      customer.orders.push(newOrder._id)
+    } else {
+      customer = new Customer({
+        ...customerInfo,
+        orders: [newOrder._id],
+      })
     }
+
+    await customer.save()
+    // }
 
     return new NextResponse("Order created", { status: 200 })
   } catch (err) {
