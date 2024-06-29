@@ -21,6 +21,11 @@ type ProductType = {
   createdAt: Date;
   updatedAt: Date;
 }
+enum OrderStatus {
+  Pending = "Pending",
+  Completed = "Completed",
+  Shipping = "Shipping",
+}
 
 type OrderColumnType = {
   _id: string;
@@ -28,6 +33,7 @@ type OrderColumnType = {
   products: number;
   totalAmount: number;
   createdAt: string;
+  status: OrderStatus;
 }
 
 type OrderItemType = {

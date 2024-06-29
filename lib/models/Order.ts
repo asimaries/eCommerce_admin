@@ -28,6 +28,11 @@ const orderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  status: {
+    type: String,
+    enum: ['Pending', 'Completed', 'Shipping'],
+    default: 'Pending',
+  },
 });
 
 const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);

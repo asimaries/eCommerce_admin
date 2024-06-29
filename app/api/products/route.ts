@@ -47,8 +47,8 @@ export const POST = async (req: NextRequest) => {
       expense,
     });
 
-    await newProduct.save();
-
+    const newp = await newProduct.save();
+    console.log(newp)
     if (collections) {
       for (const collectionId of collections) {
         const collection = await Collection.findById(collectionId);

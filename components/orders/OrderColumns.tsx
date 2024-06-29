@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
+import StatusIndicator from "./OrderStatus";
 
 export const columns: ColumnDef<OrderColumnType>[] = [
   {
@@ -33,5 +34,12 @@ export const columns: ColumnDef<OrderColumnType>[] = [
   {
     accessorKey: "createdAt",
     header: "Created At",
+  },
+  {
+    accessorKey: "status",
+    header: "STATUS",
+    cell: ({ row }) => {
+      return row.original._id !== undefined ? <StatusIndicator initialStatus={row.original.status} orderId={row.original._id} /> : <></>
+    },
   },
 ];
