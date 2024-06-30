@@ -5,6 +5,7 @@ import {
   Tag,
   UsersRound,
 } from "lucide-react";
+export const runtime = 'experimental-edge'
 
 export const navLinks = [
   {

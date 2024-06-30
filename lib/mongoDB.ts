@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+export const runtime = 'experimental-edge'
 
 let isConnected: boolean = false;
 

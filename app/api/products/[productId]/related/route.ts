@@ -1,7 +1,7 @@
 import Product from "@/lib/models/Product";
 import { connectToDB } from "@/lib/mongoDB";
 import { NextRequest, NextResponse } from "next/server";
-export const runtime = 'edge'
+export const runtime = 'experimental-edge'
 
 export const GET = async (req: NextRequest, { params }: { params: { productId: string } }) => {
   try {
@@ -16,7 +16,7 @@ export const GET = async (req: NextRequest, { params }: { params: { productId: s
     const relatedProducts = await Product.find({
       $or: [
         { category: product.category },
-        { collections: { $in: product.collections }}
+        { collections: { $in: product.collections } }
       ],
       _id: { $ne: product._id } // Exclude the current product
     })

@@ -3,7 +3,7 @@ import Order from "@/lib/models/Order";
 import { connectToDB } from "@/lib/mongoDB";
 import { NextRequest, NextResponse } from "next/server";
 // import { stripe } from "@/lib/stripe";
-export const runtime = 'edge'
+export const runtime = 'experimental-edge'
 
 export const POST = async (req: NextRequest) => {
   try {/* 

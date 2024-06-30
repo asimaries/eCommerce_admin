@@ -4,7 +4,7 @@ import { connectToDB } from "@/lib/mongoDB";
 
 import { NextRequest, NextResponse } from "next/server";
 import { format } from "date-fns";
-export const runtime = 'edge'
+export const runtime = 'experimental-edge'
 
 export const GET = async (req: NextRequest) => {
   try {

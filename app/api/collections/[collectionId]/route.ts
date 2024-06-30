@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs";
 import { connectToDB } from "@/lib/mongoDB";
 import Collection from "@/lib/models/Collection";
 import Product from "@/lib/models/Product";
-export const runtime = 'edge'
+export const runtime = 'experimental-edge'
 
 export const GET = async (
   req: NextRequest,
@@ -88,7 +88,7 @@ export const DELETE = async (
       { collections: params.collectionId },
       { $pull: { collections: params.collectionId } }
     );
-    
+
     return new NextResponse("Collection is deleted", { status: 200 });
   } catch (err) {
     console.log("[collectionId_DELETE]", err);

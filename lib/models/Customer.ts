@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
+export const runtime = 'experimental-edge'
 
 const customerSchema = new mongoose.Schema({
   clerkId: String,
   name: String,
   email: String,
   orders: {
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order"}]
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }]
   },
   createdAt: {
     type: Date,

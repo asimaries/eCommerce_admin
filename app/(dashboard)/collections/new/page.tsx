@@ -1,5 +1,5 @@
 import CollectionForm from "@/components/collections/CollectionForm"
-export const runtime = 'edge'
+export const runtime = 'experimental-edge'
 
 const CreateCollection = () => {
   return (

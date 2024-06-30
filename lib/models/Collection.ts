@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+export const runtime = 'experimental-edge'
 
 const collectionSchema = new mongoose.Schema({
   title: {
@@ -27,6 +28,6 @@ const collectionSchema = new mongoose.Schema({
   }
 })
 
-const Collection =mongoose.models.Collection || mongoose.model("Collection", collectionSchema);
+const Collection = mongoose.models.Collection || mongoose.model("Collection", collectionSchema);
 
 export default Collection;
