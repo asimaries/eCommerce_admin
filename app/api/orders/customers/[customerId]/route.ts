@@ -2,6 +2,7 @@ import Order from "@/lib/models/Order";
 import Product from "@/lib/models/Product";
 import { connectToDB } from "@/lib/mongoDB";
 import { NextRequest, NextResponse } from "next/server";
+export const runtime = 'edge'
 
 export const GET = async (
   req: NextRequest,

@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
 import Collection from "@/lib/models/Collection";
+export const runtime = 'edge'
 
 export const POST = async (req: NextRequest) => {
   try {
