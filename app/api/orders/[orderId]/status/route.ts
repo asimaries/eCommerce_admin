@@ -1,8 +1,8 @@
+export const runtime = 'experimental-edge'
 
 import Order from "@/lib/models/Order";
 import { connectToDB } from "@/lib/mongoDB";
 import { NextRequest, NextResponse } from "next/server";
-export const runtime = 'experimental-edge'
 
 export const PUT = async (req: NextRequest, { params }: { params: { orderId: String } }) => {
   try {

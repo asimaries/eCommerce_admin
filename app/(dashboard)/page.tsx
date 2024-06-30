@@ -1,3 +1,4 @@
+export const runtime = 'experimental-edge'
 import SalesChart from "@/components/custom ui/SalesChart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -7,7 +8,6 @@ import {
   getTotalSales,
 } from "@/lib/actions/actions";
 import { CircleDollarSign, ShoppingBag, UserRound } from "lucide-react";
-export const runtime = 'experimental-edge'
 
 export default async function Home() {
   const totalRevenue = await getTotalSales().then((data) => data.totalRevenue);

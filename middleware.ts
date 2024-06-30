@@ -1,5 +1,5 @@
-import { authMiddleware } from "@clerk/nextjs";
 export const runtime = 'experimental-edge'
+import { authMiddleware } from "@clerk/nextjs";
 
 export default authMiddleware({
   publicRoutes: ["/api/:path*"],

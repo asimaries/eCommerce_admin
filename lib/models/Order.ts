@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
 export const runtime = 'experimental-edge'
+import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
   customerClerkId: String,

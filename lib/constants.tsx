@@ -1,3 +1,4 @@
+export const runtime = 'experimental-edge'
 import {
   LayoutDashboard,
   Shapes,
@@ -5,7 +6,6 @@ import {
   Tag,
   UsersRound,
 } from "lucide-react";
-export const runtime = 'experimental-edge'
 
 export const navLinks = [
   {

@@ -1,9 +1,9 @@
+export const runtime = 'experimental-edge'
 import { DataTable } from '@/components/custom ui/DataTable'
 import { columns } from '@/components/customers/CustomerColumns'
 import { Separator } from '@/components/ui/separator'
 import Customer from '@/lib/models/Customer'
 import { connectToDB } from '@/lib/mongoDB'
-export const runtime = 'experimental-edge'
 
 const Customers = async () => {
   await connectToDB()

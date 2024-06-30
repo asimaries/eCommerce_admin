@@ -1,10 +1,10 @@
+export const runtime = 'experimental-edge'
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 
 import { connectToDB } from "@/lib/mongoDB";
 import Collection from "@/lib/models/Collection";
 import Product from "@/lib/models/Product";
-export const runtime = 'experimental-edge'
 
 export const GET = async (
   req: NextRequest,
